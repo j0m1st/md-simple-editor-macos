@@ -30,9 +30,26 @@ final class Document: NSDocument {
     }
 
     override func makeWindowControllers() {
-        let scroll = NSTextView.scrollableTextView()
-        let tv = scroll.documentView as! NSTextView
-        tv.layoutManager?.allowsNonContiguousLayout = true  // fast with large files
+        // TextKit 1 view with a custom layout manager, which draws tables and code blocks.
+        let tv = MarkdownTextView(usingTextLayoutManager: false)
+        let layout = MarkdownLayoutManager()
+        tv.textContainer!.replaceLayoutManager(layout)
+        layout.allowsNonContiguousLayout = true  // fast with large files
+        layout.delegate = styler
+        tv.styler = styler
+        styler.textView = tv
+        tv.delegate = styler
+        tv.minSize = .zero
+        tv.maxSize = NSSize(width: CGFloat.greatestFiniteMagnitude, height: .greatestFiniteMagnitude)
+        tv.isVerticallyResizable = true
+        tv.isHorizontallyResizable = false
+        tv.autoresizingMask = [.width]
+        tv.textContainer!.widthTracksTextView = true
+        tv.textContainer!.containerSize = NSSize(width: 760, height: CGFloat.greatestFiniteMagnitude)
+        let scroll = NSScrollView()
+        scroll.hasVerticalScroller = true
+        scroll.borderType = .noBorder
+        scroll.documentView = tv
         tv.isRichText = false
         tv.importsGraphics = false
         tv.allowsUndo = true
