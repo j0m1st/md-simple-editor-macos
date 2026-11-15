@@ -87,3 +87,12 @@ From a terminal:
 
 Hidden syntax is laid out as zero-width glyphs and table pipes as tab stops, so the underlying text is never
 modified. Only the edited lines are restyled while typing, which keeps large files fast.
+
+## Contributing
+
+Issues and pull requests are welcome. Please keep it small: no dependencies, and features that serve quick
+editing of Markdown files.
+
+## License
+
+[MIT](LICENSE)
